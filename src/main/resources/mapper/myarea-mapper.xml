@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.model.repo.MyAreaRepo">
+
+	<insert id="insert" parameterType="myArea">
+	<!--	<selectKey resultType="int" keyProperty="mid" order="BEFORE">
+	        SELECT MAX(mid)+1 FROM myarea        
+	    </selectKey>-->
+		insert into myarea(uid, dongCode, age, theme) values (#{uid}, #{dongCode}, #{age}, #{theme})
+		<!--<selectKey resultType="int" keyProperty="mid" order="AFTER">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>--> 
+	</insert>
+
+	<delete id="delete">
+		delete from myarea where mid=#{mid}
+	</delete>
+
+	<select id="selectAll" resultMap="baseMyAreaMap" parameterType="string">
+		select * from myarea where uid=#{uid}
+	</select>
+
+	<select id="select" resultMap="baseMyAreaMap" parameterType="myArea">
+		select * from myarea where uid=#{uid} and dongCode=#{dongCode} and age=#{age} and theme=#{theme}
+	</select>
+	
+	<select id="searchByDongCode" resultMap="nameMap" parameterType="string">
+		select sidoName, gugunName, dongName from dongCode where dongCode=#{dongCode}
+	</select>
+
+	<resultMap type="myArea" id="baseMyAreaMap">
+		<id column="mid" property="mid" />
+		<result column="uid" property="uid" />
+		<result column="dongCode" property="dongCode" />
+		<result column="age" property="age" />
+		<result column="theme" property="theme" />
+	</resultMap>
+	
+	<resultMap type="map" id="nameMap">
+		<result column="sidoName" property="sidoName" />
+		<result column="gugunName" property="gugunName" />
+		<result column="dongName" property="dongName" />
+	</resultMap>
+
+</mapper>

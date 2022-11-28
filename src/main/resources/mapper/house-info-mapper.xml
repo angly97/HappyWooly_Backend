@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.model.repo.HouseInfoRepo">
+	<select id="getApts" parameterType="string" resultMap="baseHouseInfoMap">
+		select hi.aptCode, hi.apartmentName, hi.buildYear, hi.lat, hi.lng, (select distinct dealAmount from housedeal hd2 where hd2.aptCode = hi.aptCode order by hd2.dealYear desc, hd2.dealMonth desc, hd2.dealDay desc limit 1) recentAmount, hd.area, hd.floor, dc.sidoName, dc.gugunName, dc.dongName, hi.roadName,trim(leading '0' from hi.roadNameBonbun) roadNameBonbun, trim(leading '0' from hi.roadNameBubun) roadNameBubun
+		from houseinfo hi
+		join housedeal hd on hd.aptCode = hi.aptCode
+		join dongcode dc on dc.dongCode = hi.dongCode
+		where hi.dongCode = #{dongCode}
+		group by aptCode;
+	</select>
+
+	<resultMap type="houseInfo" id="baseHouseInfoMap">
+		<result column="aptCode" property="aptCode" />
+		<result column="apartmentName" property="aptName" />
+		<result column="buildYear" property="buildYear" />
+		<result column="sidoName" property="sidoName" />
+		<result column="gugunName" property="gugunName" />
+		<result column="dongName" property="dongName" />
+		<result column="roadName" property="roadName" />
+		<result column="roadNameBonbun" property="roadNameBonbun" />
+		<result column="roadNameBubun" property="roadNameBubun" />
+		<result column="lat" property="lat" />
+		<result column="lng" property="lng" />
+		<result column="recentAmount" property="recentAmount" />
+		<result column="area" property="area" />
+		<result column="floor" property="floor" />
+	</resultMap> 
+
+</mapper>
